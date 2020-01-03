@@ -37,12 +37,24 @@ public class CheckCodeServlet extends HttpServlet {
 		g.setColor(Color.GRAY);
 		//填充图片
 		g.fillRect(0,0, width,height);
-		
+
 		//产生4个随机验证码，12Ey
 		String checkCode = getCheckCode();
-		//将验证码放入HttpSession中
-		request.getSession().setAttribute("CHECKCODE_SERVER",checkCode);
-		
+		String urlStr = request.getRequestURL().toString();
+//		if(urlStr.contains("login")) {
+//			//将验证码放入HttpSession中
+//			request.getSession().setAttribute("CHECKCODE_SERVER_LOGIN",checkCode);
+//		}else if(urlStr.contains("register")) {
+//
+//			//将验证码放入HttpSession中
+//			request.getSession().setAttribute("CHECKCODE_SERVER",checkCode);
+//		}else {
+
+			//将验证码放入HttpSession中
+			request.getSession().setAttribute("CHECKCODE_SERVER",checkCode);
+//		}
+
+
 		//设置画笔颜色为黄色
 		g.setColor(Color.YELLOW);
 		//设置字体的小大

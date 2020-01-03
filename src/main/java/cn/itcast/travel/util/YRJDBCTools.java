@@ -53,7 +53,7 @@ public class YRJDBCTools {
     public static DataSource getDataSource() {
         String pass = "yongren";
         String user = "root";
-        String url = "jdbc:mysql://127.0.0.1:3306/yrdb18?useSSL=false&serverTimezone=GMT%2B8";
+        String url = "jdbc:mysql://127.0.0.1:3306/hmTravel?useSSL=false&serverTimezone=GMT%2B8";
         String drivename = "com.mysql.jdbc.Driver";
 
         ComboPooledDataSource ds = new ComboPooledDataSource();

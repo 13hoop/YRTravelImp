@@ -19,4 +19,26 @@ public class UserServiceImp implements UserService {
             return false;
         }
     }
+
+    @Override
+    public boolean active(User user) {
+        UserDao dao = new UserDaoImp();
+
+        User u = dao.findUserByName(user.getUsername());
+        if(u == null) {
+            dao.updateStatus(user);
+            return  true;
+        }else  {
+            return false;
+        }
+
+    }
+
+    @Override
+    public User login(User user) {
+        UserDao dao = new UserDaoImp();
+        User u = null;
+        u = dao.findUserBy(user.getUsername(), user.getPassword());
+        return u;
+    }
 }

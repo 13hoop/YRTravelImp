@@ -18,6 +18,62 @@
     <script src="js/angular.min.js"></script>
 	<!--导入jquery-->
 	<script src="js/jquery-3.3.1.js"></script>
+
+	<script>
+
+		function invalidName() {
+			var str = $("#username").val();
+			var rgx = /^\w{3,20}$/;
+
+			var flag = rgx.test(str);
+			if(flag){
+				$("#username").css("border","");
+			}else{
+				$("#username").css("border","1px solid red");
+			}
+
+			return flag;
+		}
+
+		function invalidPwd() {
+
+			var str = $("#password").val();
+			var rgx = /^\w{6,20}$/;
+
+			var flag = rgx.test(str);
+			if(flag){
+				$("#password").css("border","");
+			}else{
+				$("#password").css("border","1px solid red");
+			}
+			return flag;
+		}
+
+		$(function() {
+			$("#username").blur(invalidName);
+			$("#password").blur(invalidPwd);
+
+			$("#loginBtn").click(function() {
+
+				console.log(" clicked ");
+				if(invalidPwd() && invalidName()) {
+
+					console.log($("#loginForm").serialize());
+
+					$.post("loginServlet", $("#loginForm").serialize(),function (data) {
+						if(data.flag) {
+							location.href = "index.html";
+						}else {
+							$("#errorMsg").html(data.errorMsg);
+						}
+					});
+				}else {
+					$("#errorMsg").html("请输入有效的密码和用户名");
+				}
+			});
+		});
+
+	</script>
 </head>
 
 <body>
@@ -52,7 +108,7 @@
 					</script>
 			</div>
 			<div class="submit_btn">
-        				<button type="button">登录</button>
+        				<button type="button" id="loginBtn">登录</button>
         				<div class="auto_login">
         					<input type="checkbox" name="" class="checkbox">
         					<span>自动登录</span>
