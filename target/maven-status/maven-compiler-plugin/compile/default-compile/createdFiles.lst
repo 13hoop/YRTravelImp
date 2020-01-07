@@ -7,3 +7,4 @@ cn/itcast/travel/service/impl/UserService.class
 cn/itcast/travel/web/servlet/CharchaterFilter.class
 cn/itcast/travel/dao/impl/UserDaoImp.class
 cn/itcast/travel/service/impl/UserRegisterServlet.class
+cn/itcast/travel/service/impl/UserCurrExitServlert.class
