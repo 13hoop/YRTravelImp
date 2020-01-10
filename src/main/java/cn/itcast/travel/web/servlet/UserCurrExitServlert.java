@@ -1,4 +1,4 @@
-package cn.itcast.travel.service.impl;
+package cn.itcast.travel.web.servlet;
 
 import cn.itcast.travel.domain.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,15 +10,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/getCurrentUserServlet")
-public class UserCurrServlet extends HttpServlet {
+//@WebServlet("/exitCurrentUserServlet")
+public class UserCurrExitServlert extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User u = null;
-        u = (User) req.getSession().getAttribute("currUser");
-        ObjectMapper mapper = new ObjectMapper();
-        resp.setContentType("application/json;charset=utf-8");
-        mapper.writeValue(resp.getOutputStream(), u);
+
+        System.out.println(" >>> here for exit & redirect....");
+
+        req.getSession().invalidate();
+        resp.sendRedirect(req.getContextPath()+"/login.html");
     }
 
     @Override

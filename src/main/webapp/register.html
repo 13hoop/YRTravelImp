@@ -59,7 +59,8 @@
 					e.preventDefault();
 					if(invalidEmail() && invalidName() && invalidPwd()) {
 						var form = $(this);
-						var url = "registerServlet";
+						// var url = "registerServlet";
+						var url = "user/regist";
 						$.ajax({
 							type: "post",
 							url: url,

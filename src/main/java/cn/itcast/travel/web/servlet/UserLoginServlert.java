@@ -1,9 +1,9 @@
-package cn.itcast.travel.service.impl;
+package cn.itcast.travel.web.servlet;
 
 import cn.itcast.travel.domain.ResultInfo;
 import cn.itcast.travel.domain.User;
-import cn.itcast.travel.util.MailUtils;
-import cn.itcast.travel.util.UuidUtil;
+import cn.itcast.travel.service.impl.UserService;
+import cn.itcast.travel.service.impl.UserServiceImp;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.beanutils.BeanUtils;
 
@@ -17,11 +17,13 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
-@WebServlet("/registerServlet")
-public class UserRegisterServlet extends HttpServlet {
+//@WebServlet("/loginServlet")
+public class UserLoginServlert extends HttpServlet {
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("utf-8");
+        UserService service = new UserServiceImp();
 
         // 验证码
         String checkCodeStr = req.getParameter("check");
@@ -40,37 +42,38 @@ public class UserRegisterServlet extends HttpServlet {
             return;
         }
 
-
+        User user = new User();
         Map<String, String[]> map = req.getParameterMap();
-        User u = new User();
         try {
-            BeanUtils.populate(u, map);
-
+            BeanUtils.populate(user, map);
         }catch (IllegalAccessException e) {
             e.printStackTrace();
         }catch (InvocationTargetException e) {
             e.printStackTrace();
         }
 
-        u.setStatus("N");
-        u.setCode(UuidUtil.getUuid());
+        User rUser = service.login(user);
+        ResultInfo info = new ResultInfo();
+        if (rUser == null) {
+            info.setFlag(false);
+            info.setErrorMsg("用户名或密码不正确，请重试");
+        }else {
 
-        // 发送激活邮件
-        String mailStr = "<a href='http://localhost:8090/activeUserServlert?code=" + u.getCode() + ">激活用户</a>";
-        MailUtils.sendMail(u.getEmail(), mailStr, "YrTravel激活用户测试");
-
-        UserService service = new UserServiceImp();
-        ResultInfo r = new ResultInfo();
-        if(service.register(u)) {
-            r.setFlag(true);
-        }else  {
-            r.setFlag(false);
-            r.setErrorMsg("注册失败");
+            req.getSession().setAttribute("currUser",rUser);
+            // 是否激活
+            if (rUser.getStatus().equalsIgnoreCase("Y")) {
+                info.setFlag(true);
+                info.setData(rUser);
+            }else {
+                info.setFlag(true);
+                info.setData(rUser);
+                info.setErrorMsg("请激活用户在完成操作");
+            }
         }
 
         ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(r);
+        String jsonStr = mapper.writeValueAsString(info);
         resp.setContentType("application/json;charset=utf-8");
-        resp.getWriter().write(json);
+        resp.getWriter().write(jsonStr);
     }
 }

@@ -1,4 +1,4 @@
-package cn.itcast.travel.service.impl;
+package cn.itcast.travel.web.servlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/activeUserServlert")
+//@WebServlet("/activeUserServlert")
 public class UserActiveServlert extends HttpServlet {
 
     @Override

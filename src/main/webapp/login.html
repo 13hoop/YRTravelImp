@@ -60,7 +60,7 @@
 
 					console.log($("#loginForm").serialize());
 
-					$.post("loginServlet", $("#loginForm").serialize(),function (data) {
+					$.post("user/login", $("#loginForm").serialize(),function (data) {
 						if(data.flag) {
 							location.href = "index.html";
 						}else {

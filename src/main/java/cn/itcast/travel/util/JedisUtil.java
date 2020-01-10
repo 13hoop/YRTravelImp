@@ -3,6 +3,7 @@ package cn.itcast.travel.util;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.JedisShardInfo;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,8 +32,7 @@ public final class JedisUtil {
         config.setMaxIdle(Integer.parseInt(pro.getProperty("maxIdle")));
 
         //初始化JedisPool
-        jedisPool = new JedisPool(config, pro.getProperty("host"), Integer.parseInt(pro.getProperty("port")));
-
+        jedisPool = new JedisPool(config, pro.getProperty("host"), Integer.parseInt(pro.getProperty("port")), 3000, pro.getProperty("pwd"));
 
     }
 
