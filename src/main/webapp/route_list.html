@@ -9,6 +9,93 @@
     <link rel="stylesheet" type="text/css" href="css/common.css">
     <link rel="stylesheet" href="css/search.css">
     <script src="js/jquery-3.3.1.js"></script>
+    <script>
+        $(function () {
+
+            var search = location.search;
+            //alert(search);//?id=5
+            // 切割字符串，拿到第二个值
+            var cid = search.split("=")[1];
+
+            //当页码加载完成后，调用load方法，发送ajax请求加载数据
+            load(cid)
+        });
+
+        function load(cid) {
+            $.post("route/queryRouteList", {"cid": 0, "currentPage": 1}, function(resp) {
+                console.log(">>>> r" + resp);
+
+                // 总页码和总记录数
+                $("#totalCount").html(resp.totalPageCount);
+                $("#totalPage").html(resp.sumPage);
+
+
+                var lis = "";
+                var fristPage = '<li onclick="javascipt:load('+cid+')"><a href="javascript:void(0)">首页</a></li>';
+                //计算上一页的页码
+                var beforeNum =  resp.currentPage - 1;
+                if(beforeNum <= 0){
+                    beforeNum = 1;
+                }
+
+                var beforePage = '<li  onclick="javascipt:load('+cid+','+beforeNum+')" class="threeword"><a href="javascript:void(0)">上一页</a></li>';
+                lis += fristPage;
+                lis += beforePage;
+
+                var begin; // 开始位置
+                var end ; //  结束位置
+                //1.要显示10个页码
+                if(resp.totalPage < 10){
+                    //总页码不够10页
+                    begin = 1;
+                    end = resp.totalPage;
+                }else{
+                    //总页码超过10页
+
+                    begin = resp.currPage - 5 ;
+                    end = resp.currPage + 4 ;
+
+                    //2.如果前边不够5个，后边补齐10个
+                    if(begin < 1){
+                        begin = 1;
+                        end = begin + 9;
+                    }
+
+                    //3.如果后边不足4个，前边补齐10个
+                    if(end > resp.totalPage){
+                        end = prespb.totalPage;
+                        begin = end - 9 ;
+                    }
+                }
+
+                // 列表render
+                for (var i = 0; i < resp.list.length; i++) {
+                    var route = resp.list[i];
+
+                    var htmlStr = "<li>";
+                    htmlStr = "<div class=\"img\"><img src='" + route.rimage + "' alt=\"\"></div>";
+                    htmlStr = "<div class=\"text1\">";
+                    htmlStr = "<p>" + route.rname + "</p><br>";
+                    htmlStr = "<p>" + route.routeIntroduce + "</p>";
+                    htmlStr = "</div>";
+                    htmlStr = "<div class=\"price\">";
+                    htmlStr = "<p class=\"price_num\">";
+                    htmlStr = "<span>&yen;</span>";
+                    htmlStr = "<span>299</span>";
+                    htmlStr = "<span>起</span>";
+                    htmlStr = "</p>";
+                    htmlStr = "<p><a href=\"route_detail.html\">查看详情</a></p>";
+                    htmlStr = "</div>";
+                    htmlStr = "</li>";
+                }
+
+            })
+        }
+
+
+
+
+    </script>
 </head>
 <body>
 <!--引入头部-->
@@ -37,118 +124,6 @@
                                 <p class="price_num">
                                     <span>&yen;</span>
                                     <span>299</span>
-                                    <span>起</span>
-                                </p>
-                                <p><a href="route_detail.html">查看详情</a></p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="img"><img src="images/04-search_03.jpg" alt=""></div>
-                            <div class="text1">
-                                <p>浪花朵朵旅行普吉岛丛林飞跃空中飞人探险游中文服务泰国旅游</p>
-                                <br/>
-                                <p>1-2月出发，网付立享￥1099/2人起！爆款位置有限，抢完即止！</p>
-                            </div>
-                            <div class="price">
-                                <p class="price_num">
-                                    <span>&yen;</span>
-                                    <span>899</span>
-                                    <span>起</span>
-                                </p>
-                                <p><a href="route_detail.html">查看详情</a></p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="img"><img src="images/04-search_03.jpg" alt=""></div>
-                            <div class="text1">
-                                <p>黑妞皇家旅行普吉岛攀牙湾大船星光之旅皮划艇日落休闲特色体验</p>
-                                <br/>
-                                <p>1-2月出发，网付立享￥1099/2人起！爆款位置有限，抢完即止！</p>
-                            </div>
-                            <div class="price">
-                                <p class="price_num">
-                                    <span>&yen;</span>
-                                    <span>999</span>
-                                    <span>起</span>
-                                </p>
-                                <p><a href="route_detail.html">查看详情</a></p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="img"><img src="images/04-search_03.jpg" alt=""></div>
-                            <div class="text1">
-                                <p>浪花朵朵旅行普吉岛皇帝岛珊瑚岛香蕉船拖拽伞水上项目</p>
-                                <br/>
-                                <p>1-2月出发，网付立享￥1099/2人起！爆款位置有限，抢完即止！</p>
-                            </div>
-                            <div class="price">
-                                <p class="price_num">
-                                    <span>&yen;</span>
-                                    <span>99</span>
-                                    <span>起</span>
-                                </p>
-                                <p><a href="route_detail.html">查看详情</a></p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="img"><img src="images/04-search_03.jpg" alt=""></div>
-                            <div class="text1">
-                                <p>环游记 泰国清迈Lila massage女子监狱spa 丽菈泰式按摩马杀鸡</p>
-                                <br/>
-                                <p>1-2月出发，网付立享￥1099/2人起！爆款位置有限，抢完即止！</p>
-                            </div>
-                            <div class="price">
-                                <p class="price_num">
-                                    <span>&yen;</span>
-                                    <span>199</span>
-                                    <span>起</span>
-                                </p>
-                                <p><a href="route_detail.html">查看详情</a></p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="img"><img src="images/04-search_03.jpg" alt=""></div>
-                            <div class="text1">
-                                <p>【减100元 含除夕/春节出发】广州增城三英温泉度假酒店/自由行套票</p>
-                                <br/>
-                                <p>1-2月出发，网付立享￥1099/2人起！爆款位置有限，抢完即止！</p>
-                            </div>
-                            <div class="price">
-                                <p class="price_num">
-                                    <span>&yen;</span>
-                                    <span>899</span>
-                                    <span>起</span>
-                                </p>
-                                <p><a href="route_detail.html">查看详情</a></p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="img"><img src="images/04-search_03.jpg" alt=""></div>
-                            <div class="text1">
-                                <p>【减100元 含除夕/春节出发】广州增城三英温泉度假酒店/自由行套票</p>
-                                <br/>
-                                <p>1-2月出发，网付立享￥1099/2人起！爆款位置有限，抢完即止！</p>
-                            </div>
-                            <div class="price">
-                                <p class="price_num">
-                                    <span>&yen;</span>
-                                    <span>1199</span>
-                                    <span>起</span>
-                                </p>
-                                <p><a href="route_detail.html">查看详情</a></p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="img"><img src="images/04-search_03.jpg" alt=""></div>
-                            <div class="text1">
-                                <p>泰国芭提雅三合一日游芭提雅蒂芬妮人妖秀成人门票bigeye含接送</p>
-                                <br/>
-                                <p>1-2月出发，网付立享￥1099/2人起！爆款位置有限，抢完即止！</p>
-                            </div>
-                            <div class="price">
-                                <p class="price_num">
-                                    <span>&yen;</span>
-                                    <span>1589</span>
                                     <span>起</span>
                                 </p>
                                 <p><a href="route_detail.html">查看详情</a></p>
