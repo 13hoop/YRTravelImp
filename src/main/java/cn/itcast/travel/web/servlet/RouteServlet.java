@@ -20,15 +20,11 @@ public class RouteServlet extends BaseServlet {
     private RouteService service = new RouteServiceImp();
     public void queryRouteList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-
-
         //1.接受参数
         String currentPageStr = req.getParameter("currentPage");
         String cidStr = req.getParameter("cid");
         int cid = Integer.parseInt(cidStr) + 1;
         int perPageSize = 10;
-
-
 
         int totleCount = service.queryRouteCount(cid);
         int currPage = Integer.parseInt(currentPageStr) - 1;
